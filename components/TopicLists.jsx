@@ -1,26 +1,40 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import RemoveBtn from "./RemoveBtn";
 import Link from "next/link";
 import { FaEdit } from "react-icons/fa";
 
-const getTopics = async () => {
-  try {
-    const res = await fetch("http://localhost:3000/api/topics", {
-      cache: "no-store",
-    });
+const TopicsList = () => {
+  const [topics, setTopics] = useState([]);
+  const [error, setError] = useState(null);
 
-    if (!res.ok) {
-      throw new Error("Failed to fetch topics");
-    }
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await fetch("http://localhost:3000/api/topics", {
+          cache: "no-store",
+        });
 
-    return res.json();
-  } catch (error) {
-    console.log("Error loading topics: ", error);
+        if (!res.ok) {
+          throw new Error("Failed to fetch topics");
+        }
+
+        const data = await res.json();
+        setTopics(data);
+      } catch (error) {
+        setError(error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  if (error) {
+    return <div>Error fetching topics: {error.message}</div>;
   }
-};
 
-export default async function TopicsList() {
-  const { topics } = await getTopics();
+  if (!topics.length) {
+    return <div>Loading topics...</div>; // Optional loading indicator
+  }
 
   return (
     <>
@@ -41,6 +55,6 @@ export default async function TopicsList() {
       ))}
     </>
   );
-}
+};
 
-
+export default TopicsList;
