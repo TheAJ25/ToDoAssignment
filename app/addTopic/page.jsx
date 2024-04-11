@@ -17,7 +17,7 @@ const page = () => {
     }
 
     try {
-      const data = await fetch("http://localhost:3000/api/topics", {
+      const data = await fetch("/api/topics", {
         method: "POST",
         headers: {
           "Content-type": "application/json",

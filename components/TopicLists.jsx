@@ -5,8 +5,9 @@ import Link from "next/link";
 import { FaEdit } from "react-icons/fa";
 
 const getTopics = async () => {
+  const apiUrl = process.env.API_URL;
   try {
-    const res = await fetch("http://localhost:3000/api/topics", {
+    const res = await fetch(`${apiUrl}/api/topics`, {
       cache: "no-store",
     });
 
