@@ -1,9 +1,12 @@
 "use client";
 import React, { useState } from "react";
+import { useRouter } from "next/navigation";
 
-const Page = () => {
+const page = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+
+  const router = useRouter();
 
   const handleChange = async (e) => {
     e.preventDefault();
@@ -23,11 +26,8 @@ const Page = () => {
       });
 
       if (data.ok) {
-        if (typeof window !== 'undefined') {
-          const router = require("next/router").default;
-          router.push("/");
-          router.reload();
-        }
+        router.push("/");
+        router.refresh();
       } else {
         throw new Error("Failed to create a topic");
       }
@@ -70,4 +70,4 @@ const Page = () => {
   );
 };
 
-export default Page;
+export default page;
