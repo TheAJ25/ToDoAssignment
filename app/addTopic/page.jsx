@@ -1,8 +1,8 @@
 "use client";
 import React, { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/router";
 
-const page = () => {
+const Page = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
 
@@ -27,7 +27,7 @@ const page = () => {
 
       if (data.ok) {
         router.push("/");
-        router.refresh();
+        router.reload();
       } else {
         throw new Error("Failed to create a topic");
       }
@@ -70,4 +70,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;
