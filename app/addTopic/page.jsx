@@ -5,7 +5,6 @@ import { useRouter } from "next/router";
 const Page = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-
   const router = useRouter();
 
   const handleChange = async (e) => {
@@ -26,8 +25,10 @@ const Page = () => {
       });
 
       if (data.ok) {
-        router.push("/");
-        router.reload();
+        if (typeof window !== 'undefined') { // Check if window is defined (client-side)
+          router.push("/");
+          router.reload();
+        }
       } else {
         throw new Error("Failed to create a topic");
       }
