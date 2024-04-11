@@ -1,11 +1,9 @@
 "use client";
 import React, { useState } from "react";
-import { useRouter } from "next/router";
 
 const Page = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const router = useRouter();
 
   const handleChange = async (e) => {
     e.preventDefault();
@@ -25,7 +23,8 @@ const Page = () => {
       });
 
       if (data.ok) {
-        if (typeof window !== 'undefined') { // Check if window is defined (client-side)
+        if (typeof window !== 'undefined') {
+          const router = require("next/router").default;
           router.push("/");
           router.reload();
         }
