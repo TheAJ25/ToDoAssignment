@@ -1,4 +1,3 @@
-
 import React from "react";
 import RemoveBtn from "./RemoveBtn";
 import Link from "next/link";
@@ -17,12 +16,18 @@ const getTopics = async () => {
 
     return res.json();
   } catch (error) {
-    console.log("Error loading topics: ", error);
+    console.error("Error loading topics: ", error);
+    
+    return []; 
   }
 };
 
 const TopicLists = async () => {
   const { topics } = await getTopics();
+
+  if (!topics) { 
+    return <div>Error loading topics. Please try again later.</div>;
+  }
 
   return (
     <>

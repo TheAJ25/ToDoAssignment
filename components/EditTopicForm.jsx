@@ -1,58 +1,40 @@
-"use client";
+import EditTopicForm from "@/components/EditTopicForm";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+const getTopicById = async (id) => {
+  const apiUrl = process.env.API_URL;
 
-export default function EditTopicForm({ id, title, description }) {
-  const [newTitle, setNewTitle] = useState(title);
-  const [newDescription, setNewDescription] = useState(description);
+  try {
+    const res = await fetch(`${apiUrl}/api/topics/${id}`, {
+      cache: "no-store",
+    });
 
-  const router = useRouter();
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    try {
-      const res = await fetch(`/api/topics/${id}`, {
-        method: "PUT",
-        headers: {
-          "Content-type": "application/json",
-        },
-        body: JSON.stringify({ newTitle, newDescription }),
-      });
-
-      if (!res.ok) {
-        throw new Error("Failed to update topic");
-      }
-
-      router.push("/");
-      router.refresh();
-    } catch (error) {
-      console.log(error);
+    if (!res.ok) {
+      throw new Error("Failed to fetch topic");
     }
-  };
 
-  return (
-    <form onSubmit={handleSubmit} className="flex pt-5 gap-5 flex-col">
-      <input
-        onChange={(e) => setNewTitle(e.target.value)}
-        value={newTitle}
-        className="border-2 border-slate-400 p-3 rounded-md text-gray-700 text-xl"
-        type="text"
-        placeholder="Topic Title"
-      />
+    return res.json();
+  } catch (error) {
+    console.error("Error fetching topic:", error);
+    
+    return null;
+  }
+};
 
-      <input
-        onChange={(e) => setNewDescription(e.target.value)}
-        value={newDescription}
-        className="border-2 border-slate-400 p-3 rounded-md text-gray-700 text-xl"
-        type="text"
-        placeholder="Topic Description"
-      />
+export default async function EditTopic({ params }) {
+  const { id } = params;
 
-      <button className="text-center bg-indigo-600 px-4 py-2 text-white rounded-md w-fit font-bold">
-        Update Topic
-      </button>
-    </form>
-  );
+  try {
+    const topic = await getTopicById(id);
+
+    if (!topic) {
+      return <div>Topic not found!</div>;
+    }
+
+    const { title, description } = topic;
+
+    return <EditTopicForm id={id} title={title} description={description} />;
+  } catch (error) {
+    console.error("Error fetching topic:", error);
+    return <div>Error loading topic!</div>;
+  }
 }
