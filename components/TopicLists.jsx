@@ -1,60 +1,49 @@
-import React, { useState, useEffect } from "react";
-import RemoveBtn from "./RemoveBtn";
+"use client"
 import Link from "next/link";
-import { FaEdit } from "react-icons/fa";
+import RemoveBtn from "./RemoveBtn";
+import { HiPencilAlt } from "react-icons/hi";
 
-const TopicsList = () => {
-  const [topics, setTopics] = useState([]);
-  const [error, setError] = useState(null);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await fetch("http://localhost:3000/api/topics", {
-          cache: "no-store",
-        });
+const getTopics = async () => {
+  try {
+    const res = await fetch("http://localhost:3000/api/topics", {
+      cache: "no-store",
+    });
 
-        if (!res.ok) {
-          throw new Error("Failed to fetch topics");
-        }
+    if (!res.ok) {
+      throw new Error("Failed to fetch topics");
+    }
 
-        const data = await res.json();
-        setTopics(data);
-      } catch (error) {
-        setError(error);
-      }
-    };
-
-    fetchData();
-  }, []);
-
-  if (error) {
-    return <div>Error fetching topics: {error.message}</div>;
+    return res.json();
+  } catch (error) {
+    console.log("Error loading topics: ", error);
   }
+};
 
-  if (!topics.length) {
-    return <div>Loading topics...</div>; // Optional loading indicator
-  }
+export default async function TopicsList() {
+  const { topics } = await getTopics();
+  
 
   return (
     <>
       {topics.map((t) => (
-        <div key={t._id} className="px-8 py-4 bg-slate-200 my-3 flex justify-between rounded-md gap-5 items-center">
+        <div
+          key={t._id}
+          className="px-8 py-3 bg-slate-200 my-3 flex justify-between gap-5"
+        >
           <div>
-            <h2 className="font-bold text-gray-700 text-xl">{t.title}</h2>
-            <div className="text-sm text-indigo-600">{t.description}</div>
+            <h2 className="font-bold text-gray-800 text-xl">{t.title}</h2>
+            <div>{t.description}</div>
           </div>
 
-          <div className="flex gap-5 text-gray-700">
+          <div className="flex justify-center items-center text-gray-800 gap-2">
             <RemoveBtn id={t._id} />
             <Link href={`/editTopic/${t._id}`}>
-              <FaEdit size={24} />
+              <HiPencilAlt size={24} />
             </Link>
           </div>
         </div>
       ))}
     </>
   );
-};
-
-export default TopicsList;
+}

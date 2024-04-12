@@ -33,11 +33,11 @@ export default function EditTopicForm({ id, title, description }) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-3">
+    <form onSubmit={handleSubmit} className="flex flex-col gap-5">
       <input
         onChange={(e) => setNewTitle(e.target.value)}
         value={newTitle}
-        className="border border-slate-500 px-8 py-2"
+        className="border rounded-md border-slate-400 text-gray-800 px-8 py-3 mt-5"
         type="text"
         placeholder="Topic Title"
       />
@@ -45,12 +45,12 @@ export default function EditTopicForm({ id, title, description }) {
       <input
         onChange={(e) => setNewDescription(e.target.value)}
         value={newDescription}
-        className="border border-slate-500 px-8 py-2"
+        className="border rounded-md border-slate-400 text-gray-800 px-8 py-3"
         type="text"
         placeholder="Topic Description"
       />
 
-      <button className="bg-green-600 font-bold text-white py-3 px-6 w-fit">
+      <button className="bg-indigo-600 rounded-md font-bold text-white py-3 px-6 w-fit">
         Update Topic
       </button>
     </form>

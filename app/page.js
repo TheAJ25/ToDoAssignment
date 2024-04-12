@@ -1,4 +1,5 @@
 "use client"
+
 import TopicLists from "@/components/TopicLists";
 
 export default function Home() {
