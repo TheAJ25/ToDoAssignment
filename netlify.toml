@@ -1,0 +1,6 @@
+[build]
+  command = "npm run build"  # Assuming your build script is "npm run build"
+  publish = "out"  # Assuming your build output goes to the "out" directory
+
+[framework]
+  name = "next.js"  # Specify Next.js as the framework
